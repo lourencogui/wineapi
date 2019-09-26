@@ -2,7 +2,7 @@
 
 const BaseExceptionHandler = use('BaseExceptionHandler')
 const Env = use('Env')
-const Youch = use('Youch')
+const Youch = use('youch')
 const Sentry = use('Sentry')
 /**
  * This class handles all exceptions thrown during
@@ -22,7 +22,7 @@ class ExceptionHandler extends BaseExceptionHandler {
    *
    * @return {void}
    */
-  async handle (error, { request, response }) {
+  async handle(error, { request, response }) {
     if (error.name === 'ValidationException') {
       return response.status(error.status).send(error.messages)
     }
@@ -37,7 +37,7 @@ class ExceptionHandler extends BaseExceptionHandler {
     return response.status(error.status)
   }
 
-  async report (error, { request }) {
+  async report(error, { request }) {
     Sentry.captureException(error)
   }
 }
