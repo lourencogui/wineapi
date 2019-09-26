@@ -2,6 +2,7 @@
 
 const Route = use('Route')
 
+Route.get('/', () => { return { ok: true } });
 // USER
 Route.post('users', 'UserController.store').validator('User')
 Route.post('sessions', 'SessionController.store').validator('Session')
