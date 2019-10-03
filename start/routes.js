@@ -20,5 +20,4 @@ Route.group(() => {
   Route.resource('sales', 'SaleController').apiOnly().validator(new Map([
     [['sales.store'], ['Sale']]
   ]))
-})
-// .middleware(['auth'])
+}).middleware(['auth'])
