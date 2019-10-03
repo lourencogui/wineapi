@@ -2,7 +2,7 @@
 
 const Route = use('Route')
 
-Route.get('/', () => { return { ok: true } });
+Route.get('/', () => { return { ok: true } })
 // USER
 Route.get('users', 'UserController.index')
 Route.post('users', 'UserController.store').validator('User')
@@ -20,4 +20,5 @@ Route.group(() => {
   Route.resource('sales', 'SaleController').apiOnly().validator(new Map([
     [['sales.store'], ['Sale']]
   ]))
-}).middleware(['auth'])
+})
+// .middleware(['auth'])
