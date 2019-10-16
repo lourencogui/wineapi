@@ -2,7 +2,7 @@
 
 /** @type {import('@adonisjs/framework/src/Server')} */
 const Server = use('Server')
-  .use(['Adonis/Middleware/Cors'])
+// .use(['Adonis/Middleware/Cors'])
 
 /*
 |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ const namedMiddleware = {
 */
 const serverMiddleware = [
   // 'Adonis/Middleware/Static',
-  'Adonis/Middleware/Cors'
+  // 'Adonis/Middleware/Cors'
 ]
 
 Server
