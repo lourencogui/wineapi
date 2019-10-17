@@ -5,9 +5,9 @@ class SessionController {
     const { email, password } = request.all()
 
     const { token, type } = await auth.attempt(email, password)
-    const user = await User.findBy({ email })
+    const { admin } = await User.findBy({ email })
 
-    return { token, type, user }
+    return { token, type, admin }
   }
 }
 
