@@ -25,7 +25,7 @@ module.exports = {
   |
   */
   bcrypt: {
-    rounds: 10
+    rounds: 3
   },
 
   /*

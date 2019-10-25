@@ -8,7 +8,7 @@
  * Resourceful controller for interacting with sales
  */
 const Sale = use('App/Models/Sale')
-const Wine = use('App/Models/Wine')
+const Product = use('App/Models/Product')
 const Kue = use('Kue')
 const Job = use('App/Jobs/SendNewSaleEmail')
 const Database = use('Database')
@@ -26,26 +26,18 @@ class SaleController {
   async index ({ request, response, view }) {
   }
 
-  /**
-   * Create/save a new sale.
-   * POST sales
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async store ({ request, response, auth }) {
-    const data = request.input('wines')
+    const data = request.input('products')
     const { user } = auth
     let total = 0
 
     // VALIDA SE POSSUI ESTOQUE
     for (let i = 0; i < data.length; i++) {
       const { id, quantity } = data[i]
-      const wine = await Wine.findByOrFail('id', id)
-      if (wine.available < quantity) return response.json({ message: 'Não possui estoque' })
+      const product = await Product.findByOrFail('id', id)
+      if (product.available < quantity) return response.json({ message: 'Não possui estoque' })
 
-      total += (quantity * wine.price)
+      total += (quantity * product.price)
     }
 
     const trx = await Database.beginTransaction()
@@ -54,7 +46,7 @@ class SaleController {
     // RELACIONA OS PRODUTOS COM A COMPRA
     for (let i = 0; i < data.length; i++) {
       const { id, quantity } = data[i]
-      await sale.wines().attach([id], (row) => {
+      await sale.products().attach([id], (row) => {
         row.quantity = quantity
       }, trx)
     }
@@ -62,18 +54,18 @@ class SaleController {
     // ATUALIZANDO QUANTIDADE DISPONIVEL
     for (let i = 0; i < data.length; i++) {
       const { id, quantity } = data[i]
-      const wine = await Wine.findByOrFail('id', id)
+      const product = await Product.findByOrFail('id', id)
 
-      const newQuantity = wine.available - quantity
+      const newQuantity = product.available - quantity
 
-      wine.merge({ available: newQuantity })
-      await wine.save(trx)
+      product.merge({ available: newQuantity })
+      await product.save(trx)
     }
     await trx.commit()
 
-    const wines = await sale.wines().fetch()
+    const products = await sale.products().fetch()
     // console.log(wines.rows)
-    Kue.dispatch(Job.key, { wines, user, sale }, { attempts: 3 })
+    Kue.dispatch(Job.key, { products, user, sale }, { attempts: 3 })
 
     return response.json({ success: true })
   }

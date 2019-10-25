@@ -14,8 +14,14 @@ class Sale extends Model {
     return this.belongsTo('App/Models/User')
   }
 
-  wines () {
-    return this.belongsToMany('App/Models/Wine')
+  // wines () {
+  //   return this.belongsToMany('App/Models/Wine')
+  //     .withPivot(['quantity'])
+  // }
+
+  products () {
+    return this.belongsToMany('App/Models/Product')
+      .pivotTable('sale_product')
       .withPivot(['quantity'])
   }
 }
