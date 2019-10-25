@@ -12,7 +12,7 @@ class ProductController {
 
     const random = Helpers.promisify(crypto.randomBytes)
     const fileName = await random(16)
-    await avatar.move(Helpers.tmpPath('uploads'), {
+    await avatar.move(Helpers.publicPath('uploads'), {
       name: `${fileName.toString('hex')}.png`,
       overwrite: true
     })
@@ -22,7 +22,7 @@ class ProductController {
     }
 
     const trx = await Database.beginTransaction()
-    const product = await Product.create({ ...data, avatar: `${Helpers.tmpPath(`/uploads/${avatar.fileName}`)}` }, trx)
+    const product = await Product.create({ ...data, avatar: `${Helpers.publicPath(`/uploads/${avatar.fileName}`)}` }, trx)
     await trx.commit()
     return product
   }
