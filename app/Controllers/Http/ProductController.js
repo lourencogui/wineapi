@@ -11,12 +11,13 @@ class ProductController {
       data = JSON.parse(value)
     })
 
-    await request.multipart.file('avatar', {}, async (f) => {
+    request.multipart.file('avatar', {}, async (f) => {
       try {
         const random = Helpers.promisify(crypto.randomBytes)
         const fileName = await random(16)
         const fullName = `${fileName.toString('hex')}.png`
         const ContentType = f.headers['content-type']
+        console.log(ContentType)
 
         await Drive.disk('s3').put(fullName, f.stream, {
           ContentType,
@@ -37,7 +38,8 @@ class ProductController {
           }
         })
       }
-    }).process()
+    })
+    await request.multipart.process()
 
     return result
   }
