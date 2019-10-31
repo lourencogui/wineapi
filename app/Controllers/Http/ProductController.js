@@ -3,6 +3,7 @@ const Helpers = use('Helpers')
 const Product = use('App/Models/Product')
 const Drive = use('Drive')
 const Database = use('Database')
+
 class ProductController {
   async store ({ request, response }) {
     let data, url, result
@@ -16,7 +17,7 @@ class ProductController {
       const fullName = `${fileName.toString('hex')}.png`
 
       await Drive.disk('s3').put(fullName, f.stream, {
-        ACL: 'public-read'
+        acl: 'public-read'
       })
       url = await Drive.disk('s3').getUrl(fullName)
       // url = 'teste'
