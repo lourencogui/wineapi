@@ -11,12 +11,13 @@ class ProductController {
     })
 
     request.multipart.file('avatar', {}, async (f) => {
-      const random = Helpers.promisify(crypto.randomBytes)
-      const fileName = await random(16)
-      const fullName = `${fileName.toString('hex')}.png`
+      // const random = Helpers.promisify(crypto.randomBytes)
+      // const fileName = await random(16)
+      // const fullName = `${fileName.toString('hex')}.png`
 
-      await Drive.disk('s3').put(fullName, f.stream)
-      url = await Drive.disk('s3').getUrl(fullName)
+      // await Drive.disk('s3').put(fullName, f.stream)
+      // url = await Drive.disk('s3').getUrl(fullName)
+      url = 'teste'
 
       const trx = await Database.beginTransaction()
       const product = await Product.create({ ...data, avatar: url }, trx)
