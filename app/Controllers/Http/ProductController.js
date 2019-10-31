@@ -11,23 +11,34 @@ class ProductController {
       data = JSON.parse(value)
     })
 
-    request.multipart.file('avatar', {}, async (f) => {
-      const random = Helpers.promisify(crypto.randomBytes)
-      const fileName = await random(16)
-      const fullName = `${fileName.toString('hex')}.png`
+    await request.multipart.file('avatar', {}, async (f) => {
+      try {
+        const random = Helpers.promisify(crypto.randomBytes)
+        const fileName = await random(16)
+        const fullName = `${fileName.toString('hex')}.png`
+        const ContentType = f.headers['content-type']
 
-      await Drive.disk('s3').put(fullName, f.stream, {
-        acl: 'public-read'
-      })
-      url = await Drive.disk('s3').getUrl(fullName)
-      // url = 'teste'
+        await Drive.disk('s3').put(fullName, f.stream, {
+          ContentType,
+          ACL: 'public-read'
+        })
+        url = await Drive.disk('s3').getUrl(fullName)
+        // url = 'teste'
 
-      const trx = await Database.beginTransaction()
-      const product = await Product.create({ ...data, avatar: url }, trx)
-      await trx.commit()
-      result = product
-    })
-    await request.multipart.process()
+        const trx = await Database.beginTransaction()
+        const product = await Product.create({ ...data, avatar: url }, trx)
+        await trx.commit()
+        result = product
+      } catch (error) {
+        return response.status(error.status).json({
+          error: {
+            message: 'Não foi possível processar o arquivo',
+            errorMessage: error.message
+          }
+        })
+      }
+    }).process()
+
     return result
   }
 

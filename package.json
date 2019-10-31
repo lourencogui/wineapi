@@ -34,7 +34,7 @@
     "@adonisjs/validator": "^5.0.6",
     "adonis-kue": "^5.0.1",
     "adonis-sentry": "^1.0.4",
-    "aws-sdk": "^2.558.0",
+    "aws-sdk": "^2.560.0",
     "crypto": "^1.0.1",
     "pg": "^7.12.0",
     "url-parse": "^1.4.7",
