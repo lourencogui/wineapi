@@ -6,7 +6,7 @@ const Database = use('Database')
 
 class ProductController {
   async store ({ request, response }) {
-    let data, url, result
+    let data, result
     request.multipart.field(async (name, value) => {
       data = JSON.parse(value)
     })
@@ -17,13 +17,13 @@ class ProductController {
         const fileName = await random(16)
         const fullName = `${fileName.toString('hex')}.png`
         const ContentType = f.headers['content-type']
-        console.log(ContentType)
+        const ACL = 'public-read'
 
-        await Drive.disk('s3').put(fullName, f.stream, {
+        const url = await Drive.put(fullName, f.stream, {
           ContentType,
-          ACL: 'public-read'
+          ACL
         })
-        url = await Drive.disk('s3').getUrl(fullName)
+        // url = await Drive.getUrl(fullName)
         // url = 'teste'
 
         const trx = await Database.beginTransaction()
