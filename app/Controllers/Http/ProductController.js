@@ -19,7 +19,7 @@ class ProductController {
         const ContentType = f.headers['content-type']
         const ACL = 'public-read'
 
-        const url = await Drive.put(fullName, f.stream, {
+        const url = await Drive.disk('s3').put(fullName, f.stream, {
           ContentType,
           ACL
         })
