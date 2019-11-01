@@ -35,7 +35,7 @@ class ProductController {
         Sentry.captureException(error)
         return response.status(error.status).json({
           error: {
-            message: 'Não foi possível processar o arquivo',
+            message: 'Não foi possível processar o arquivo v2',
             errorMessage: error.message
           }
         })
