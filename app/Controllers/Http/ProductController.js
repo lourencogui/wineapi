@@ -3,6 +3,7 @@ const Helpers = use('Helpers')
 const Product = use('App/Models/Product')
 const Drive = use('Drive')
 const Database = use('Database')
+const Sentry = use('Sentry')
 
 class ProductController {
   async store ({ request, response }) {
@@ -31,6 +32,7 @@ class ProductController {
         await trx.commit()
         result = product
       } catch (error) {
+        Sentry.captureException(error)
         return response.status(error.status).json({
           error: {
             message: 'Não foi possível processar o arquivo',
