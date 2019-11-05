@@ -4,9 +4,9 @@
 const Model = use('Model')
 
 class Product extends Model {
-  type () {
-    return this.belongsTo('App/Models/ProductType')
-  }
+  // type () {
+  //   return this.belongsTo('App/Models/ProductType')
+  // }
 
   sales () {
     return this.belongsToMany('App/Models/Sale')
